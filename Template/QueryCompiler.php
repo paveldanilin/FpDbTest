@@ -62,7 +62,7 @@ class QueryCompiler implements CompilerInterface
         // This is a const text (without spec and blocks)
         if(!str_contains($template, $this->specSign) && !str_contains($template, $this->blockStartSign)) {
             $partials[] = $template;
-            return new QueryTemplate($partials);
+            return new Template($partials);
         }
 
         $len = strlen($template);
@@ -93,7 +93,7 @@ class QueryCompiler implements CompilerInterface
             $partials[] = substr($template, $cursor);
         }
 
-        return new QueryTemplate($partials);
+        return new Template($partials);
     }
 
     private function createVariable(string $spec, int $pos): VariableInterface

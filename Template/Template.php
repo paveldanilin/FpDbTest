@@ -4,7 +4,7 @@ namespace FpDbTest\Template;
 
 use FpDbTest\Template\Variable\VariableInterface;
 
-class QueryTemplate implements TemplateInterface
+class Template implements TemplateInterface
 {
     private array $partials;
 
