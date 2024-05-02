@@ -2,46 +2,34 @@
 
 namespace FpDbTest;
 
-use FpDbTest\Template\QueryTemplate;
-use FpDbTest\Template\TemplateInterface;
+use FpDbTest\Template\DefaultTemplateFactory;
+use FpDbTest\Template\TemplateFactoryInterface;
+use FpDbTest\Template\Cache\MemoryCache;
+use FpDbTest\Template\QueryCompiler;
 use mysqli;
 
 class Database implements DatabaseInterface
 {
     private mysqli $mysqli;
-    private array $queriesMap;
     private string $blockSkip;
+    private TemplateFactoryInterface $templateFactory;
 
     public function __construct(mysqli $mysqli, string $blockSkip = '@@')
     {
         $this->mysqli = $mysqli;
-        $this->queriesMap = [];
         $this->blockSkip = $blockSkip;
+        $this->templateFactory = new DefaultTemplateFactory(
+            new QueryCompiler('?', '{', '}', $blockSkip),
+            new MemoryCache());
     }
 
     public function buildQuery(string $query, array $args = []): string
     {
-        return $this->getTemplate($query)->render($args);
+        return $this->templateFactory->create($query)->render($args);
     }
 
     public function skip()
     {
         return $this->blockSkip;
-    }
-
-    // TODO: should be an external factory
-    private function getTemplate(string $query): TemplateInterface
-    {
-        $queryKey = md5($query);
-        if (!array_key_exists($queryKey, $this->queriesMap)) {
-            $this->queriesMap[$queryKey] = new QueryTemplate(
-                $query,
-                '?',
-                '{',
-                '}',
-                $this->blockSkip);
-        }
-
-        return $this->queriesMap[$queryKey];
     }
 }

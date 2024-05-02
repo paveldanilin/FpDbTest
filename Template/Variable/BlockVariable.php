@@ -1,17 +1,19 @@
 <?php
 
-namespace FpDbTest\Template;
+namespace FpDbTest\Template\Variable;
 
 // Supports nested blocks
-class BlockVariable extends TemplateVariable
+use FpDbTest\Template\TemplateInterface;
+
+class BlockVariable extends Variable
 {
     private string $blockSkip;
-    private TemplateInterface $subTemplate;
+    private TemplateInterface $blockTemplate;
 
-    public function __construct(int $position, string $text, string $blockSkip) {
+    public function __construct(int $position, string $blockSkip, TemplateInterface $block) {
         parent::__construct($position);
-        $this->subTemplate = new QueryTemplate($text);
         $this->blockSkip = $blockSkip;
+        $this->blockTemplate = $block;
     }
 
     public function convert($value): string
@@ -26,6 +28,6 @@ class BlockVariable extends TemplateVariable
             }
         }
 
-        return $this->subTemplate->render($value);
+        return $this->blockTemplate->render($value);
     }
 }

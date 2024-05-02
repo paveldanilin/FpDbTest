@@ -1,8 +1,8 @@
 <?php
 
-namespace FpDbTest\Template;
+namespace FpDbTest\Template\Variable;
 
-interface TemplateVariableInterface
+interface VariableInterface
 {
     public function getPosition(): int;
 

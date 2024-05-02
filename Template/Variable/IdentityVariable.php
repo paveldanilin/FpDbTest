@@ -1,8 +1,8 @@
 <?php
 
-namespace FpDbTest\Template;
+namespace FpDbTest\Template\Variable;
 
-class IdentityVariable extends TemplateVariable
+class IdentityVariable extends Variable
 {
     public function convert($value): string
     {
