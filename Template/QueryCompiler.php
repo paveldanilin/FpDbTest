@@ -68,7 +68,7 @@ class QueryCompiler implements CompilerInterface
         $len = strlen($template);
         $cursor = 0;
 
-        for ($pos = 0; $pos < $len; $pos++) {
+        for ($pos = 0; $pos < $len;) {
             $ch = $template[$pos];
 
             if ($ch === $this->specSign) {
@@ -86,6 +86,8 @@ class QueryCompiler implements CompilerInterface
 
                 $partials[] = new BlockVariable($pos, $this->blockSkip, $this->compile(substr($block, 1, -1)));
                 $this->variablesCount++;
+            } else {
+                $pos++;
             }
         }
 

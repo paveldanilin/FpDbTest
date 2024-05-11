@@ -41,6 +41,13 @@ class DatabaseTest
             );
         }
 
+        $results[] = $this->db->buildQuery('SELECT * FROM users WHERE a = 1{ AND b =? }{ AND c = ?} AND d =4',
+            [$this->db->skip(), 'exists']);
+
+        $results[] = $this->db->buildQuery("SELECT * FROM users WHERE name = ?", ["Esc'ape"]);
+
+        $results[] = $this->db->buildQuery("SELECT * FROM position WHERE 1=1 {AND x = ? {AND y = ?}}", [[5, 15]]);
+
         $correct = [
             'SELECT name FROM users WHERE user_id = 1',
             'SELECT * FROM users WHERE name = \'Jack\' AND block = 0',
@@ -48,6 +55,9 @@ class DatabaseTest
             'UPDATE users SET `name` = \'Jack\', `email` = NULL WHERE user_id = -1',
             'SELECT name FROM users WHERE `user_id` IN (1, 2, 3)',
             'SELECT name FROM users WHERE `user_id` IN (1, 2, 3) AND block = 1',
+            'SELECT * FROM users WHERE a = 1 AND c = \'exists\' AND d =4',
+            "SELECT * FROM users WHERE name = 'Esc\'ape'",
+            "SELECT * FROM position WHERE 1=1 AND x = 5 AND y = 15"
         ];
 
         if ($results !== $correct) {
