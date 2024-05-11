@@ -10,7 +10,7 @@ class ValueVariable extends Variable
             return 'NULL';
         }
         if (is_string($value)) {
-            return "'$value'";
+            return "'" . addslashes($value) . "'";
         }
         if (is_bool($value)) {
             return (int)$value;
